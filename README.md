@@ -4,6 +4,21 @@
 
 A small, self-hosted Telegram interface to [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It accepts text from one allowlisted user in a private chat, runs Claude Code on the host, and returns the result to Telegram.
 
+## Why use this instead of the official Claude Telegram channel?
+
+The official Claude Telegram channel does not currently provide the complete remote-workflow experience implemented here. This project was built after direct testing of those limitations; it is not merely another text relay.
+
+| Capability | Official channel | This bridge |
+| --- | --- | --- |
+| Telegram-ready Markdown rendering | Not handled reliably as a complete delivery pipeline | Converts responses to MarkdownV2, splits long messages, and falls back to plain text |
+| Questions as native Telegram buttons | Not supported | Turns structured Claude questions into 2–8 inline choice buttons and feeds the selection back into the same session |
+| Remote tool permission approval | Not supported as Telegram-native controls | Shows **allow once**, **allow for this task/always**, and **deny** buttons when Claude requests permission |
+| Multiple messages while Claude is busy | No persistent application-level task queue | Stores messages in a persistent FIFO queue and processes them safely one at a time |
+| Useful progress without permanent clutter | No equivalent managed lifecycle | Posts short tool-progress updates, then automatically removes status and progress messages after the final answer |
+| Conversation and queue recovery | No equivalent bridge-managed state | Persists the Claude session, Telegram offset, queue, pending choices, and relevant metadata across restarts |
+
+In short, this bridge turns Telegram into a practical remote Claude Code client with interaction, authorization, queuing, progress, and lifecycle management—not just message forwarding.
+
 ## Features
 
 - Private, single-user access enforced with a numeric Telegram user ID
